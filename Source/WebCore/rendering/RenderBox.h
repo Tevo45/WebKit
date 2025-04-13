@@ -31,6 +31,8 @@
 #include "ShapeOutsideInfo.h"
 #include <wtf/TypeCasts.h>
 
+#include "LayoutSpy.h"
+
 namespace WebCore {
 
 class RenderBlockFlow;
@@ -67,10 +69,12 @@ public:
     LayoutUnit top() const { return topLeftLocation().y(); }
     LayoutUnit left() const { return topLeftLocation().x(); }
 
-    template<typename T> void setX(T x) { m_frameRect.setX(x); }
-    template<typename T> void setY(T y) { m_frameRect.setY(y); }
-    template<typename T> void setWidth(T width) { m_frameRect.setWidth(width); }
-    template<typename T> void setHeight(T height) { m_frameRect.setHeight(height); }
+    void dimensionChanged(const char *methodName, LayoutUnit value);
+
+    template<typename T> void setX(T x) { m_frameRect.setX(x); m_spy.setX(m_frameRect.x()); }
+    template<typename T> void setY(T y) { m_frameRect.setY(y); m_spy.setY(m_frameRect.y()); }
+    template<typename T> void setWidth(T width) { m_frameRect.setWidth(width); m_spy.setWidth(m_frameRect.width()); }
+    template<typename T> void setHeight(T height) { m_frameRect.setHeight(height); m_spy.setHeight(m_frameRect.height()); }
 
     inline LayoutUnit logicalLeft() const;
     inline LayoutUnit logicalRight() const;
@@ -756,6 +760,8 @@ private:
 private:
     // The width/height of the contents + borders + padding.  The x/y location is relative to our container (which is not always our parent).
     LayoutRect m_frameRect;
+
+    LayoutSpy m_spy;
 
 protected:
     LayoutBoxExtent m_marginBox;

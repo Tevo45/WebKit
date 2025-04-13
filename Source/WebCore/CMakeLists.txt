@@ -183,6 +183,7 @@ set(WebCore_PRIVATE_INCLUDE_DIRECTORIES
     "${WEBCORE_DIR}/platform/xr"
     "${WEBCORE_DIR}/plugins"
     "${WEBCORE_DIR}/rendering"
+    "${WEBCORE_DIR}/rendering/layoutviewer"
     "${WEBCORE_DIR}/rendering/line"
     "${WEBCORE_DIR}/rendering/mathml"
     "${WEBCORE_DIR}/rendering/shapes"

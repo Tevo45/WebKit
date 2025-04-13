@@ -2802,6 +2802,7 @@ rendering/LayerAncestorClippingStack.cpp
 rendering/LayerOverlapMap.cpp
 rendering/LayoutDisallowedScope.cpp
 rendering/LayoutRepainter.cpp
+rendering/layoutviewer/LayoutSpy.cpp
 rendering/LegacyInlineBox.cpp
 rendering/LegacyInlineFlowBox.cpp
 rendering/LegacyInlineIterator.cpp

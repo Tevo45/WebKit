@@ -2607,6 +2607,8 @@ set(WebCore_PRIVATE_FRAMEWORK_HEADERS
     rendering/TextBoxSelectableRange.h
     rendering/TransformOperationData.h
 
+    rendering/layoutviewer/LayoutSpy.h
+
     rendering/line/LineWidth.h
     rendering/line/TrailingObjects.h
 
