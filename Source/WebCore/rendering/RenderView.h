@@ -31,6 +31,8 @@
 #include <wtf/ListHashSet.h>
 #include <wtf/WeakHashSet.h>
 
+#include "LayoutSpy.h"
+
 namespace WebCore {
 
 class ImageQualityController;
@@ -223,6 +225,8 @@ public:
     void removeViewTransitionGroup(const AtomString&);
     RenderBox* viewTransitionGroupForName(const AtomString&);
 
+    LayoutSpy& layoutSpy() { return m_layoutSpy; }
+
 private:
     void styleDidChange(StyleDifference, const RenderStyle* oldStyle) override;
 
@@ -295,6 +299,8 @@ private:
 
     SingleThreadWeakPtr<RenderBlockFlow> m_viewTransitionRoot;
     HashMap<AtomString, SingleThreadWeakPtr<RenderBox>> m_viewTransitionGroups;
+
+    LayoutSpy m_layoutSpy;
 };
 
 } // namespace WebCore

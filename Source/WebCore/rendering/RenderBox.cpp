@@ -111,7 +111,6 @@ WTF_MAKE_TZONE_OR_ISO_ALLOCATED_IMPL(RenderBox);
 struct SameSizeAsRenderBox : public RenderBoxModelObject {
     virtual ~SameSizeAsRenderBox() = default;
     LayoutRect frameRect;
-    LayoutSpy spy;
     LayoutBoxExtent marginBox;
     LayoutUnit preferredLogicalWidths[2];
     void* pointers[1];
@@ -142,15 +141,13 @@ static const unsigned backgroundObscurationTestMaxDepth = 4;
 bool RenderBox::s_hadNonVisibleOverflow = false;
 
 RenderBox::RenderBox(Type type, Element& element, RenderStyle&& style, OptionSet<TypeFlag> flags, TypeSpecificFlags typeSpecificFlags)
-    : RenderBoxModelObject(type, element, WTFMove(style), flags | TypeFlag::IsBox, typeSpecificFlags),
-      m_spy(*this)
+    : RenderBoxModelObject(type, element, WTFMove(style), flags | TypeFlag::IsBox, typeSpecificFlags)
 {
     ASSERT(isRenderBox());
 }
 
 RenderBox::RenderBox(Type type, Document& document, RenderStyle&& style, OptionSet<TypeFlag> flags, TypeSpecificFlags typeSpecificFlags)
-    : RenderBoxModelObject(type, document, WTFMove(style), flags | TypeFlag::IsBox, typeSpecificFlags),
-      m_spy(*this)
+    : RenderBoxModelObject(type, document, WTFMove(style), flags | TypeFlag::IsBox, typeSpecificFlags)
 {
     ASSERT(isRenderBox());
 }
@@ -5182,6 +5179,11 @@ bool RenderBox::overflowChangesMayAffectLayout() const
 #endif
     return !ScrollbarTheme::theme().usesOverlayScrollbars();
 
+}
+
+LayoutSpy& RenderBox::layoutSpy()
+{
+    return view().layoutSpy();
 }
 
 } // namespace WebCore

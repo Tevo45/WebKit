@@ -5001,9 +5001,12 @@ void LocalFrameView::paintContents(GraphicsContext& context, const IntRect& dirt
     RenderObject* renderer = m_nodeToDraw ? m_nodeToDraw->renderer() : nullptr;
     RenderLayer* rootLayer = renderView->layer();
 
+    auto subpixelOffset = LayoutSize();
+
     RenderObject::SetLayoutNeededForbiddenScope forbidSetNeedsLayout(rootLayer->renderer());
 
-    rootLayer->paint(context, dirtyRect, LayoutSize(), m_paintBehavior, renderer, { }, securityOriginPaintPolicy == SecurityOriginPaintPolicy::AnyOrigin ? RenderLayer::SecurityOriginPaintPolicy::AnyOrigin : RenderLayer::SecurityOriginPaintPolicy::AccessibleOriginOnly, regionContext);
+    rootLayer->paint(context, dirtyRect, subpixelOffset, m_paintBehavior, renderer, { }, securityOriginPaintPolicy == SecurityOriginPaintPolicy::AnyOrigin ? RenderLayer::SecurityOriginPaintPolicy::AnyOrigin : RenderLayer::SecurityOriginPaintPolicy::AccessibleOriginOnly, regionContext);
+    renderView->layoutSpy().paintChangelog(context, dirtyRect);
     if (auto* scrollableRootLayer = rootLayer->scrollableArea()) {
         if (scrollableRootLayer->containsDirtyOverlayScrollbars() && !regionContext)
             scrollableRootLayer->paintOverlayScrollbars(context, dirtyRect, m_paintBehavior, renderer);

@@ -71,10 +71,10 @@ public:
 
     void dimensionChanged(const char *methodName, LayoutUnit value);
 
-    template<typename T> void setX(T x) { m_frameRect.setX(x); m_spy.setX(m_frameRect.x()); }
-    template<typename T> void setY(T y) { m_frameRect.setY(y); m_spy.setY(m_frameRect.y()); }
-    template<typename T> void setWidth(T width) { m_frameRect.setWidth(width); m_spy.setWidth(m_frameRect.width()); }
-    template<typename T> void setHeight(T height) { m_frameRect.setHeight(height); m_spy.setHeight(m_frameRect.height()); }
+    template<typename T> void setX(T x) { m_frameRect.setX(x); layoutSpy().setX(this, m_frameRect.x()); }
+    template<typename T> void setY(T y) { m_frameRect.setY(y); layoutSpy().setY(this, m_frameRect.y()); }
+    template<typename T> void setWidth(T width) { m_frameRect.setWidth(width); layoutSpy().setWidth(this, m_frameRect.width()); }
+    template<typename T> void setHeight(T height) { m_frameRect.setHeight(height); layoutSpy().setHeight(this, m_frameRect.height()); }
 
     inline LayoutUnit logicalLeft() const;
     inline LayoutUnit logicalRight() const;
@@ -757,11 +757,11 @@ private:
     ShapeOutsideInfo& ensureShapeOutsideInfo();
     void removeShapeOutsideInfo();
 
+    LayoutSpy& layoutSpy();
+
 private:
     // The width/height of the contents + borders + padding.  The x/y location is relative to our container (which is not always our parent).
     LayoutRect m_frameRect;
-
-    LayoutSpy m_spy;
 
 protected:
     LayoutBoxExtent m_marginBox;
