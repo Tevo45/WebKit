@@ -1,7 +1,7 @@
 #include "config.h"
 
 #include "Color.h"
-#include "IntRect.h"
+#include "FloatRect.h"
 #include "LayoutSpy.h"
 
 #include "LogInitialization.h"
@@ -30,14 +30,14 @@ WTF::TextStream& operator<<(WTF::TextStream& stream, LayoutDelta::Subject subjec
 
 LayoutSpy::LayoutSpy() = default;
 
-void LayoutSpy::logChange(const RenderObject *object, const LayoutDelta::Subject subject, LayoutUnit newValue)
+void LayoutSpy::logChange(const RenderObject *object, const LayoutDelta::Subject subject, float newValue)
 {
     ASSERT(object);
     LOG_WITH_STREAM(Layout, stream << object->renderName() << "::set" << subject << "(" << newValue << ")");
     m_changeQueue.append(LayoutDelta { object, subject, newValue });
 }
 
-IntRect& LayoutSpy::boxForElement(const RenderObject *key)
+FloatRect& LayoutSpy::boxForElement(const RenderObject *key)
 {
     if (auto box = m_elements.find(key); box != m_elements.end())
         return box->second;
@@ -64,7 +64,7 @@ void LayoutSpy::processQueueChanges()
     m_changeQueue.clear();
 }
 
-void LayoutSpy::paintCurrentState(GraphicsContext& context, const IntRect& damageRect)
+void LayoutSpy::paintCurrentState(GraphicsContext& context, const FloatRect& damageRect)
 {
     GraphicsContextStateSaver stateSaver(context);
 
@@ -75,13 +75,13 @@ void LayoutSpy::paintCurrentState(GraphicsContext& context, const IntRect& damag
     context.setStrokeColor(SRGBA<uint8_t> { 0, 0, 0, 255 });
     
     for (auto& key : m_elementOrdering) {
-        IntRect& elementBox = m_elements[key];
+        FloatRect& elementBox = m_elements[key];
         // This actually takes a FloatRect, perhaps we should just store it like that as well?
         context.strokeRect(elementBox, 2);
     }
 }
 
-void LayoutSpy::paintChangelog(GraphicsContext& context, const IntRect& damageRect)
+void LayoutSpy::paintChangelog(GraphicsContext& context, const FloatRect& damageRect)
 {
     LOG_WITH_STREAM(Layout, stream << "Should paint " << m_changeQueue.size() << " queue events for region " << damageRect);
     
@@ -89,9 +89,9 @@ void LayoutSpy::paintChangelog(GraphicsContext& context, const IntRect& damageRe
     paintCurrentState(context, damageRect);
 }
 
-void LayoutSpy::setX(const RenderObject *object, LayoutUnit x) { logChange(object, LayoutDelta::Subject::X, x); }
-void LayoutSpy::setY(const RenderObject *object, LayoutUnit y) { logChange(object, LayoutDelta::Subject::Y, y); }
-void LayoutSpy::setWidth(const RenderObject *object, LayoutUnit width) { logChange(object, LayoutDelta::Subject::Width, width); }
-void LayoutSpy::setHeight(const RenderObject *object, LayoutUnit height) { logChange(object, LayoutDelta::Subject::Height, height); }
+void LayoutSpy::setX(const RenderObject *object, float x) { logChange(object, LayoutDelta::Subject::X, x); }
+void LayoutSpy::setY(const RenderObject *object, float y) { logChange(object, LayoutDelta::Subject::Y, y); }
+void LayoutSpy::setWidth(const RenderObject *object, float width) { logChange(object, LayoutDelta::Subject::Width, width); }
+void LayoutSpy::setHeight(const RenderObject *object, float height) { logChange(object, LayoutDelta::Subject::Height, height); }
 
 }
